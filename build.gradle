@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev.repositories' version '1.0.14'
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
+group = 'de.vfyjxf'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+    maven {
+        name = 'neoforge'
+        url = 'https://maven.neoforged.net/releases'
+    }
+}
+
+dependencies {
+    compileOnly 'net.lenni0451.classtransform:core:1.14.1'
+    compileOnly "org.jetbrains:annotations:24.1.0"
+    compileOnly "cpw.mods:securejarhandler:3.0.8"
+    compileOnly "net.neoforged.fancymodloader:loader:4.0.41"
+    compileOnly "net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7"
+}
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+
+}
+
+jar {
+    manifest {
+        attributes(
+                "Premain-Class": "dev.vfyjxf.agent.MixinHotSwapAgent",
+                "Agent-Class": "dev.vfyjxf.agent.MixinHotSwapAgent",
+        )
+    }
+}
