@@ -1,11 +1,13 @@
 plugins {
     id 'java'
     id 'net.neoforged.moddev.repositories' version '1.0.14'
-    id 'maven-publish'
+//    id 'maven-publish'
+    id "com.vanniktech.maven.publish" version "0.35.0"
+    id 'signing'
 }
 
 group = 'de.vfyjxf'
-version = '1.0'
+version = '1.1'
 
 repositories {
     mavenCentral()
@@ -17,21 +19,24 @@ repositories {
         name = 'neoforge'
         url = 'https://maven.neoforged.net/releases'
     }
+    maven {
+        name = "MinecraftForge"
+        url = "https://maven.minecraftforge.net/"
+    }
 }
 
 dependencies {
-
     compileOnly "org.jetbrains:annotations:24.1.0"
-    compileOnly "cpw.mods:securejarhandler:3.0.8"
-    compileOnly "cpw.mods:bootstraplauncher:2.0.2"
-    compileOnly "net.neoforged.fancymodloader:loader:4.0.41"
+    compileOnly "cpw.mods:securejarhandler:2.1.10"
+    compileOnly "cpw.mods:bootstraplauncher:1.1.2"
+    compileOnly "cpw.mods:modlauncher:10.0.9"
     compileOnly "net.fabricmc:sponge-mixin:0.16.5+mixin.0.8.7"
 }
 
 java {
     withSourcesJar()
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 
 }
@@ -47,17 +52,36 @@ jar {
     }
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-            group = 'dev.vfyjxf.agent'
-            version = project.version
-            artifactId = 'mixin-hotswap-agent'
+signing {
+    useGpgCmd()
+}
 
+mavenPublishing {
+    coordinates("dev.vfyjxf", "mixin-hotswap-agent", project.version)
+    publishToMavenCentral()
+    signAllPublications()
+    pom {
+        name = "My Library"
+        description = "A fixed version of MixinAgent for neoforge prior to 1.21.9(fml10)."
+        url = "https://github.com/vfyjxf/MixinHotSwapAgent"
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://github.com/vfyjxf/MixinHotSwapAgent/blob/main/LICENSE"
+                distribution = "https://github.com/vfyjxf/MixinHotSwapAgent/blob/main/LICENSE"
+            }
         }
-    }
-    repositories {
-        mavenLocal()
+        developers {
+            developer {
+                id = "vfyjxf"
+                name = "vfyjxf"
+                url = "https://github.com/vfyjxf"
+            }
+        }
+        scm {
+            url = "https://github.com/vfyjxf/MixinHotSwapAgent"
+            connection = "scm:git:git://github.com/vfyjxf/MixinHotSwapAgent.git"
+            developerConnection = "scm:git:ssh://git@github.com/vfyjxf/MixinHotSwapAgent.git"
+        }
     }
 }

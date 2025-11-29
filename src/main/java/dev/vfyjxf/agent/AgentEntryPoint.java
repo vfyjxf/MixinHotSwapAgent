@@ -6,6 +6,7 @@ public class AgentEntryPoint {
 
     public static void premain(String arg, Instrumentation instrumentation) {
         MixinHotSwapAgent.instrumentation = instrumentation;
+        System.setProperty("mixin.hotSwap", "true");
         instrumentation.addTransformer(Patches.createTransformer());
     }
 
